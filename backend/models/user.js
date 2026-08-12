@@ -85,3 +85,13 @@ userSchema.methods.changedPasswordAfter= function(JWTTimestamp){
     }
     return false;
 }
+
+userSchema.methods.getJWTToken = function(){
+    return jwt.sign(
+        {id:this._id},
+        process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_EXPIRES}
+    )
+}
+
+module.exports = mongoose.model("User", userSchema)

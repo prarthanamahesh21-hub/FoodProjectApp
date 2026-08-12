@@ -56,3 +56,15 @@ const userSchema = new mongoose.Schema({
 },
 {timestamps:true}
 );
+
+// hash password
+//pre("save") => runs before data is saved
+
+userSchema.pre("save", async function(){
+    if(!this.isModified("password")) return;
+
+    this.password = await bycrypt.hash(this.password, 12)
+    this.passwordConfirm = undefined
+})
+
+//pass compare

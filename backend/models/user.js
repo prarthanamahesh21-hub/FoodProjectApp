@@ -68,3 +68,20 @@ userSchema.pre("save", async function(){
 })
 
 //pass compare
+userSchema.methods.correctPassword = async function(
+    candidatePassword, userPassword
+){
+    return await bcyrpt.compare(candidatePassword,userPassword)
+
+}
+
+//checks whether the user's pass was changes after getting jwt token
+userSchema.methods.changedPasswordAfter= function(JWTTimestamp){
+    if(this.passwordChangedAt){
+        const changedTimestamp = parseInt(
+            this.passwordChangedAt.getTime()/1000, 10
+        )
+        return JWTTimetoken < changedTimestamp
+    }
+    return false;
+}
